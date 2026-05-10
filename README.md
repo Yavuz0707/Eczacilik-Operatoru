@@ -1,6 +1,6 @@
 # Eczacilik Operatoru
 
-Eczacilik Operatoru, temel eczane envanter islemlerini komut satiri uzerinden yonetmek icin hazirlanmis bir C++ otomasyon projesidir. Proje; ilac kaydi ekleme, kayitlari listeleme, ilac arama, kayit silme ve kayit guncelleme gibi temel stok takip adimlarini sade bir menu yapisi ile sunar.
+Eczacilik Operatoru, temel eczane envanter islemlerini komut satiri uzerinden yonetmek icin hazirlanmis bir C++ otomasyon projesidir. Proje; ilac kaydi ekleme, kayitlari listeleme, ilac arama, kayit silme, kayit guncelleme ve kayitlari binary dosyaya aktarma gibi temel stok takip adimlarini sade bir menu yapisi ile sunar.
 
 Bu README, projenin amacini, calisma mantigini, kullanilan veri yapisini, derleme adimlarini ve gelistirme notlarini aciklar.
 
@@ -15,7 +15,8 @@ Eczanelerdeki ilac bilgilerinin basit ve anlasilir bir sistem uzerinden takip ed
 - Ilac adina gore arama yapma
 - Kayitli ilac bilgisini silme
 - Ilac bilgilerini guncelleme
-- Ilac bilgilerini dosyada saklama
+- Ilac bilgilerini `eczane.bin` dosyasina aktarma
+- `eczane.bin` dosyasindan kayitlari tekrar listeye alma
 - Menu tabanli konsol arayuzu
 
 ## Kayit Altina Alinan Bilgiler
@@ -24,11 +25,13 @@ Her ilac kaydi icin asagidaki bilgiler tutulur:
 
 | Alan | Aciklama |
 | --- | --- |
+| ID | Ilacin benzersiz kayit numarasi |
 | Ilac adi | Ilacin sistemde gorunen adi |
-| Ilac turu | Ilacin kategorisi veya tur bilgisi |
-| Firma | Ilaci ureten veya dagitan firma |
-| Miktar | Stoktaki ilac miktari |
+| Etken madde | Ilacin etken madde bilgisi |
+| Uretici firma | Ilaci ureten veya dagitan firma |
 | Fiyat | Ilacin satis fiyati |
+| Stok | Stoktaki ilac adedi |
+| Raf omru | Ilacin raf omru veya son kullanim tarihi bilgisi |
 
 ## Kullanilan Teknolojiler
 
@@ -36,7 +39,8 @@ Her ilac kaydi icin asagidaki bilgiler tutulur:
 | --- | --- |
 | C++ | Ana programlama dili |
 | Struct | Ilac kayitlarini modellemek icin kullanilir |
-| fstream | Dosya okuma ve yazma islemleri icin kullanilir |
+| Bagli liste | Kayitlari bellekte sirali sekilde tutmak icin kullanilir |
+| Binary dosya islemleri | Dosya okuma ve yazma islemleri icin kullanilir |
 | Binary dosyalama | Kayitlarin kalici olarak saklanmasini saglar |
 | Konsol arayuzu | Kullanicinin menu uzerinden islem yapmasini saglar |
 
@@ -52,9 +56,12 @@ Ornek menu akisinda su islemler bulunur:
 3 - Ilac Arama
 4 - Ilac Silme
 5 - Ilac Duzeltme
+6 - Kayitlari Dosyaya Aktar
+7 - Kayitlari Dosyadan Al
+0 - Cikis
 ```
 
-Kayit ekleme isleminde kullanicidan ilac adi, turu, firma bilgisi, miktar ve fiyat bilgileri alinir. Bu bilgiler bir kayit yapisina aktarilir ve dosyaya yazilir. Listeleme, arama, silme ve duzeltme islemleri de bu dosyadaki kayitlar uzerinden yurutulur.
+Kayit ekleme isleminde kullanicidan ilac ID'si, adi, etken maddesi, uretici firma bilgisi, fiyat, stok adedi ve raf omru alinir. Bu bilgiler bagli liste yapisina aktarilir. Kullanici isterse kayitlari `eczane.bin` dosyasina yazabilir veya daha once kaydedilen verileri dosyadan tekrar okuyabilir.
 
 ## Kurulum
 
@@ -67,27 +74,27 @@ cd Eczacilik-Operatoru
 
 ## Derleme
 
-Proje C++ ile yazildigi icin bir C++ derleyicisine ihtiyac vardir. Kaynak kod repo kok dizinine `ECZANE.cpp` adiyla eklendiginde asagidaki komutlarla derlenebilir.
+Proje C++ ile yazildigi icin bir C++ derleyicisine ihtiyac vardir. Kaynak kod repo kok dizininde `Untitled1.cpp` dosyasinda bulunur.
 
 ### g++ ile derleme
 
 ```bash
-g++ ECZANE.cpp -o ECZANE
+g++ Untitled1.cpp -o EczacilikOperatoru
 ```
 
 Windows uzerinde calistirmak icin:
 
 ```bash
-ECZANE.exe
+EczacilikOperatoru.exe
 ```
 
 Linux veya macOS uzerinde calistirmak icin:
 
 ```bash
-./ECZANE
+./EczacilikOperatoru
 ```
 
-> Not: Proje Windows konsol ortaminda gelistirildiyse `conio.h` gibi Windows odakli kutuphaneler kullanilmis olabilir. Bu durumda Linux veya macOS uzerinde derleme icin kodda kucuk uyarlamalar gerekebilir.
+> Not: Proje Windows konsol ortaminda gelistirilmistir ve `windows.h` uzerinden konsol kod sayfasi ayari yapar. Linux veya macOS uzerinde derleme icin bu kisimda kucuk uyarlamalar gerekebilir.
 
 ## Kullanim
 
@@ -113,6 +120,7 @@ Bu proje ile asagidaki konular pratik edilir:
 
 - C++ temel giris/cikis islemleri
 - Struct ile veri modelleme
+- Bagli liste mantigi
 - Fonksiyonlara bolunmus program tasarimi
 - Dosya okuma ve yazma
 - Binary dosya kullanimi
